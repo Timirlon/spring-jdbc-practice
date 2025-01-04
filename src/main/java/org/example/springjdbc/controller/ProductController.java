@@ -15,12 +15,12 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAll() {
-        return productDao.getAll();
+        return productDao.findAll();
     }
 
     @GetMapping("/{id}")
     public Product getById(@PathVariable int id) {
-        return productDao.getById(id);
+        return productDao.findById(id);
     }
 
     @PostMapping

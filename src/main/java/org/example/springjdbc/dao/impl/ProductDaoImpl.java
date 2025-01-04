@@ -20,7 +20,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProductDaoImpl implements ProductDao {
     private final JdbcTemplate jdbcTemplate;
-    CategoryDao categoryDao;
 
     private final static String GET_ALL_QUERY = """
  SELECT p.id AS product_id, p.name AS product_name, price, c.id AS category_id, c.name AS category_name
@@ -32,12 +31,12 @@ public class ProductDaoImpl implements ProductDao {
  """;
 
     @Override
-    public List<Product> getAll() {
+    public List<Product> findAll() {
         return jdbcTemplate.query(GET_ALL_QUERY, this::mapRow);
     }
 
     @Override
-    public Product getById(int id) {
+    public Product findById(int id) {
         String sql = GET_ALL_QUERY + " WHERE p.id = ?";
         return jdbcTemplate.query(sql, this::mapRow, id)
                 .stream()
@@ -63,7 +62,14 @@ public class ProductDaoImpl implements ProductDao {
         return product;
     }
 
-    public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public Product update(Product product) {
+        String sql = "UPDATE products SET name = ?, price = ? WHERE id = ?";
+        jdbcTemplate.update(sql, product.getName(), product.getPrice(), product.getId());
+
+        return product;
+    }
+
+    private Product mapRow(ResultSet rs, int rowNum) throws SQLException {
         int id = rs.getInt("product_id");
         String name = rs.getString("product_name");
         double price = rs.getDouble("price");
@@ -73,12 +79,5 @@ public class ProductDaoImpl implements ProductDao {
 
 
         return new Product(id, name, price, new Category(categoryId, categoryName));
-    }
-
-    public Product update(Product product) {
-        String sql = "UPDATE products SET name = ?, price = ? WHERE id = ?";
-        jdbcTemplate.update(sql, product.getName(), product.getPrice(), product.getId());
-
-        return product;
     }
 }

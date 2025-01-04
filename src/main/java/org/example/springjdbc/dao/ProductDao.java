@@ -5,9 +5,9 @@ import org.example.springjdbc.model.Product;
 import java.util.List;
 
 public interface ProductDao {
-    List<Product> getAll();
+    List<Product> findAll();
 
-    Product getById(int id);
+    Product findById(int id);
 
     Product create(Product product);
 

@@ -14,5 +14,9 @@ import java.util.List;
 public class Category {
     int id;
     String name;
-    List<Option> options;
+    final List<Option> options = new ArrayList<>();
+
+    public void addOption(Option option) {
+        options.add(option);
+    }
 }

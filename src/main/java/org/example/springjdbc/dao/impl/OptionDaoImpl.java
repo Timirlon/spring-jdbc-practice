@@ -18,10 +18,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OptionDaoImpl implements OptionDao {
     private final JdbcTemplate jdbcTemplate;
-    private final CategoryDao categoryDao;
 
     private final static String GET_ALL_QUERY = """
-            SELECT o.id AS option_id, o.name AS option_name, o.category_id AS category_id
+            SELECT o.id AS option_id, o.name AS option_name
             FROM options o
             """;
 
@@ -62,13 +61,7 @@ public class OptionDaoImpl implements OptionDao {
         int id = rs.getInt("option_id");
         String name = rs.getString("option_name");
 
-        int categoryId = rs.getInt("category_id");
-
-        Category category = categoryDao.findById(categoryId);
-
 
         return new Option(id, name, null);
     }
-
-
 }
